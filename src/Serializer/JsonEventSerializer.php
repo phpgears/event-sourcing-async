@@ -16,6 +16,7 @@ namespace Gears\EventSourcing\Async\Serializer;
 use Gears\Event\Async\Serializer\Exception\EventSerializationException;
 use Gears\Event\Async\Serializer\JsonEventSerializer as BaseJsonEventSerializer;
 use Gears\Event\Event;
+use Gears\EventSourcing\Aggregate\AggregateVersion;
 use Gears\EventSourcing\Event\AggregateEvent;
 use Gears\Identity\Identity;
 
@@ -41,7 +42,7 @@ class JsonEventSerializer extends BaseJsonEventSerializer
         return [
             'aggregateIdClass' => \get_class($aggregateId),
             'aggregateId' => $aggregateId->getValue(),
-            'aggregateVersion' => $event->getAggregateVersion(),
+            'aggregateVersion' => $event->getAggregateVersion()->getValue(),
             'createdAt' => $event->getCreatedAt()->format(self::DATE_RFC3339_EXTENDED),
         ];
     }
@@ -76,7 +77,7 @@ class JsonEventSerializer extends BaseJsonEventSerializer
 
         return [
             'aggregateId' => $identityClass::fromString($attributes['aggregateId']),
-            'aggregateVersion' => $attributes['aggregateVersion'],
+            'aggregateVersion' => new AggregateVersion($attributes['aggregateVersion']),
             'createdAt' => \DateTimeImmutable::createFromFormat(self::DATE_RFC3339_EXTENDED, $attributes['createdAt']),
         ];
     }
