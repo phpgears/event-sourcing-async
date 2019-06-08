@@ -11,9 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Gears\EventSourcing\Async\Tests;
+namespace Gears\EventSourcing\Async\Tests\Serializer;
 
 use Gears\Event\Event;
+use Gears\EventSourcing\Aggregate\AggregateVersion;
 use Gears\EventSourcing\Async\Serializer\JsonEventSerializer;
 use Gears\EventSourcing\Async\Tests\Stub\AggregateEventStub;
 use Gears\Identity\UuidIdentity;
@@ -46,6 +47,8 @@ class JsonEventSerializerTest extends TestCase
 
         $this->assertContains('"payload":{"data":"value"}', $serialized);
         $this->assertContains('"aggregateIdClass":"Gears\\\\Identity\\\\UuidIdentity"', $serialized);
+        $this->assertContains('"aggregateVersion":0', $serialized);
+        $this->assertContains('"metadata":[]', $serialized);
         $this->assertContains('"aggregateId":"3247cb6e-e9c7-4f3a-9c6c-0dec26a0353f"', $serialized);
     }
 
@@ -55,6 +58,8 @@ class JsonEventSerializerTest extends TestCase
             UuidIdentity::fromString('3247cb6e-e9c7-4f3a-9c6c-0dec26a0353f'),
             ['data' => 'value']
         );
+        $event = $event->withMetadata(['meta' => 'data']);
+        $event = $event->withAggregateVersion(new AggregateVersion(10));
         $eventDate = $event->getCreatedAt()->format('Y-m-d\TH:i:s.uP');
 
         $serialized = '{"class":"Gears\\\\EventSourcing\\\\Async\\\\Tests\\\\Stub\\\\AggregateEventStub",'
@@ -62,7 +67,8 @@ class JsonEventSerializerTest extends TestCase
             . '"attributes":{'
             . '"aggregateIdClass":"Gears\\\\Identity\\\\UuidIdentity",'
             . '"aggregateId":"3247cb6e-e9c7-4f3a-9c6c-0dec26a0353f",'
-            . '"aggregateVersion":1,'
+            . '"aggregateVersion":10,'
+            . '"metadata":{"meta":"data"},'
             . '"createdAt":"' . $eventDate . '"'
             . '}}';
 
@@ -81,7 +87,8 @@ class JsonEventSerializerTest extends TestCase
             . '"payload":{"data":"value"},'
             . '"attributes":{'
             . '"aggregateId":"3247cb6e-e9c7-4f3a-9c6c-0dec26a0353f",'
-            . '"aggregateVersion":1,'
+            . '"aggregateVersion":0,'
+            . '"metadata":{},'
             . '"createdAt":"2019-01-01T00:00:00.000000+00:00"'
             . '}}';
 
@@ -99,7 +106,8 @@ class JsonEventSerializerTest extends TestCase
             . '"attributes":{'
             . '"aggregateIdClass":"Gears\\\\Event\\\\Async\\\\Serializer\\\\JsonEventSerializer",'
             . '"aggregateId":"3247cb6e-e9c7-4f3a-9c6c-0dec26a0353f",'
-            . '"aggregateVersion":1,'
+            . '"aggregateVersion":0,'
+            . '"metadata":{},'
             . '"createdAt":"2019-01-01T00:00:00.000000+00:00"'
             . '}}';
 
