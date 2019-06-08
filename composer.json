@@ -23,7 +23,7 @@
   "prefer-stable": true,
   "require": {
     "php": "^7.1",
-    "phpgears/event-async": "~0.1.2",
+    "phpgears/event-async": "~0.1.3",
     "phpgears/event-sourcing": "dev-master"
   },
   "require-dev": {
