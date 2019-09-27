@@ -44,7 +44,6 @@ class JsonEventSerializer extends BaseJsonEventSerializer
             'aggregateId' => $aggregateId->getValue(),
             'aggregateVersion' => $event->getAggregateVersion()->getValue(),
             'metadata' => $event->getMetadata(),
-            'createdAt' => $event->getCreatedAt()->format(self::DATE_RFC3339_EXTENDED),
         ];
     }
 
@@ -74,13 +73,10 @@ class JsonEventSerializer extends BaseJsonEventSerializer
             ));
         }
 
-        /* @var string $aggregateId */
-
         return [
             'aggregateId' => $identityClass::fromString($attributes['aggregateId']),
             'aggregateVersion' => new AggregateVersion($attributes['aggregateVersion']),
             'metadata' => $attributes['metadata'],
-            'createdAt' => \DateTimeImmutable::createFromFormat(self::DATE_RFC3339_EXTENDED, $attributes['createdAt']),
         ];
     }
 }
