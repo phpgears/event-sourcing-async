@@ -30,7 +30,7 @@ Require composer autoload file
 require './vendor/autoload.php';
 ```
 
-This package adds a new `Gears\EventSourcing\Async\Serializer\JsonEventSerializer` serializer to allow `Gears\EventSourcing\Event\AggregateEvent` events to be used in Async event buses
+This package adds a new `Gears\EventSourcing\Async\Serializer\JsonEventSerializer` serializer, as a general serializer allowing maximum compatibility in case of events being handled by other systems, to allow `Gears\EventSourcing\Event\AggregateEvent` events to be used in Async event bus
 
 ```php
 use Gears\Event\Async\AsyncEventBus;
